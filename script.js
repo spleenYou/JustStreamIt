@@ -1,4 +1,14 @@
 const startURL = "http://localhost:8000/api/v1/"
+let genresTab = [25]
+for (let i = 1; i < 6; i++) {
+    APIRequest("genres/?page=" + i).then((genres) => {
+        genres.results.forEach(genre => {
+            genresTab[genre.id] = genre.name
+        })
+    }).then(() => {
+        startFilled()
+    })
+}
 
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
@@ -39,6 +49,7 @@ function openModal(movie) {
             countries += " / "
         }
     }
+    console.log(movie)
     modal.children[0].children[0].children[1].children[0].innerHTML = movie.year + " - " + genres
     modal.children[0].children[0].children[1].children[1].innerHTML = movie.duration + " minutes (" + countries + ")"
     modal.children[0].children[0].children[1].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
@@ -53,56 +64,69 @@ function openModal(movie) {
     })
 }
 
-function findBestMovies() {
+function findBestMovies(param, place="") {  
+    if (param > 0) {
+        searchURL = "?sort_by=imdb_score&genre=" + genresTab[param]
+    } else if (param == 0) {
+        searchURL = "?sort_by=imdb_score"
+    }
     let bestMovies = []
-    APIRequest("titles/?sort_by=imdb_score")
-        .then((res) => {
-            let numberOfPages = res.count
-            let pageNumber = Math.trunc(numberOfPages / 5) - 1
-            APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score").then((page) => {
+    APIRequest("titles/" + searchURL).then((res) => {
+        let numberOfPages = res.count
+        let pageNumber = Math.trunc(numberOfPages / 5) - 1
+        APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score").then((page) => {
+            page.results.forEach(movie => {
+                bestMovies.push(movie)
+            });
+        }).then(() => {
+            APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score").then((page) => {
                 page.results.forEach(movie => {
                     bestMovies.push(movie)
                 });
             }).then(() => {
-                APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score").then((page) => {
+                APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score").then((page) => {
                     page.results.forEach(movie => {
                         bestMovies.push(movie)
                     });
                 }).then(() => {
-                    APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score").then((page) => {
-                        page.results.forEach(movie => {
-                            bestMovies.push(movie)
-                        });
-                    }).then(() => {
-                        // Gestion partie "Best movie"
-                        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
-                            const bestMovie = document.getElementById("bestMovie").children[1]
-                            bestMovie.children[0].setAttribute("src", movie.image_url)
-                            bestMovie.children[0].setAttribute("alt", movie.title + "_image")
-                            bestMovie.children[1].children[0].innerHTML = movie.title
-                            bestMovie.children[1].children[1].innerHTML = movie.description
-                            let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
-                            bestMovieDetailsButton.addEventListener("click", () => {
-                                openModal(movie)
-                            })
-                        })
-                        let bestMoviesElt = document.getElementById("bestMovies").children[1]
-                        console.log(bestMoviesElt)
-                        for (let i = 0; i < 6; i++) {
-                            APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
-                                bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
-                                bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
-                                bestMoviesElt.children[i].children[1].children[0].innerHTML = movie.title
-                                bestMoviesElt.children[i].children[1].children[1].addEventListener("click", () => {
-                                    openModal(movie)
-                                })
-                            })
-                        }
-                    })
+                    if (param > 0) {
+                        fillCategory(bestMovies, place)
+                    } else if (param == 0) {
+                        fillBestMovies(bestMovies)
+                    }
                 })
             })
         })
+    })
 }
 
+function fillBestMovies(bestMovies) {
+    APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+        const bestMovie = document.getElementById("bestMovie").children[1]
+        bestMovie.children[0].setAttribute("src", movie.image_url)
+        bestMovie.children[0].setAttribute("alt", movie.title + "_image")
+        bestMovie.children[1].children[0].innerHTML = movie.title
+        bestMovie.children[1].children[1].innerHTML = movie.description
+        let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
+        bestMovieDetailsButton.addEventListener("click", () => {
+            openModal(movie)
+        })
+    })
+    let bestMoviesElt = document.getElementById("bestMovies").children[1]
+    for (let i = 0; i < 6; i++) {
+        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+            bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
+            bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
+            bestMoviesElt.children[i].children[1].children[0].innerHTML = movie.title
+            bestMoviesElt.children[i].children[1].children[1].addEventListener("click", () => {
+                openModal(movie)
+            })
+        })
+    }
+}
 
-findBestMovies()
+function startFilled() {
+    findBestMovies(0)
+    findBestMovies(0)
+    findBestMovies(0)
+}

@@ -165,10 +165,12 @@ h1 {
     display: none;
     flex-flow: column;
     width: 718px;
+    max-height: 90%;
     padding: 20px 30px;
     align-items: center;
     background-color: white;
     position: fixed;
+    overflow-y: scroll;
 }
 
 #modal > div {
