@@ -1,16 +1,11 @@
-const bestMovie = document.getElementById("bestMovie")
 const startURL = "http://localhost:8000/api/v1/"
 
 // Gestion des requêtes avec l'API
-function APIRequest(endURL) {
-    return new Promise((resolve) => {
-        let test = fetch(startURL + endURL).then(res => {
-            if (res.ok) {
-                let reponse = res.json()
-                resolve(reponse)
-            }
-        })
-    })
+async function APIRequest(endURL) {
+    const r = await fetch(startURL + endURL)
+    if (r.ok) {
+        return r.json()
+    }
 }
 
 // Gestion du modal
@@ -59,25 +54,55 @@ function openModal(movie) {
 }
 
 function findBestMovies() {
-    APIRequest("titles/?sort_by=imdb_score").then((res) => {
-        let numberOfPages = res.count
-        let lastPage = Math.ceil(numberOfPages / 5)
-        APIRequest("titles/?page=" + lastPage + "&sort_by=imdb_score").then((lastpage) => {
-            console.log(lastPage)
+    let bestMovies = []
+    APIRequest("titles/?sort_by=imdb_score")
+        .then((res) => {
+            let numberOfPages = res.count
+            let pageNumber = Math.trunc(numberOfPages / 5) - 1
+            APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score").then((page) => {
+                page.results.forEach(movie => {
+                    bestMovies.push(movie)
+                });
+            }).then(() => {
+                APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score").then((page) => {
+                    page.results.forEach(movie => {
+                        bestMovies.push(movie)
+                    });
+                }).then(() => {
+                    APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score").then((page) => {
+                        page.results.forEach(movie => {
+                            bestMovies.push(movie)
+                        });
+                    }).then(() => {
+                        // Gestion partie "Best movie"
+                        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+                            const bestMovie = document.getElementById("bestMovie").children[1]
+                            bestMovie.children[0].setAttribute("src", movie.image_url)
+                            bestMovie.children[0].setAttribute("alt", movie.title + "_image")
+                            bestMovie.children[1].children[0].innerHTML = movie.title
+                            bestMovie.children[1].children[1].innerHTML = movie.description
+                            let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
+                            bestMovieDetailsButton.addEventListener("click", () => {
+                                openModal(movie)
+                            })
+                        })
+                        let bestMoviesElt = document.getElementById("bestMovies").children[1]
+                        console.log(bestMoviesElt)
+                        for (let i = 0; i < 6; i++) {
+                            APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+                                bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
+                                bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
+                                bestMoviesElt.children[i].children[1].children[0].innerHTML = movie.title
+                                bestMoviesElt.children[i].children[1].children[1].addEventListener("click", () => {
+                                    openModal(movie)
+                                })
+                            })
+                        }
+                    })
+                })
+            })
         })
-    })
 }
 
-// Gestion partie "Best movie"
-APIRequest("titles/3062096").then((movie) => {
-    bestMovie.children[1].children[0].setAttribute("src", movie.image_url)
-    bestMovie.children[1].children[0].setAttribute("alt", movie.title + "_image")
-    bestMovie.children[1].children[1].children[0].innerHTML = movie.title
-    bestMovie.children[1].children[1].children[1].innerHTML = movie.description
-    let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
-    bestMovieDetailsButton.addEventListener("click", () => {
-        openModal(movie)
-    })
-})
 
 findBestMovies()
