@@ -1,14 +1,5 @@
 const startURL = "http://localhost:8000/api/v1/"
-let genresTab = [25]
-for (let i = 1; i < 6; i++) {
-    APIRequest("genres/?page=" + i).then((genres) => {
-        genres.results.forEach(genre => {
-            genresTab[genre.id] = genre.name
-        })
-    }).then(() => {
-        startFilled()
-    })
-}
+let genresTab = [undefined, "Romance", "Biography", "Crime", "Drama", "History", "Adventure", "Fantasy", "War", "Mystery", "Horror", "Western", "Comedy", "Family", "Action", "Sci-Fi", "Thriller", "Sport", "Animation", "Musical", "Music", "Film-Noir", "Adult", "Documentary", "Reality-TV", "News"]
 
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
@@ -49,7 +40,6 @@ function openModal(movie) {
             countries += " / "
         }
     }
-    console.log(movie)
     modal.children[0].children[0].children[1].children[0].innerHTML = movie.year + " - " + genres
     modal.children[0].children[0].children[1].children[1].innerHTML = movie.duration + " minutes (" + countries + ")"
     modal.children[0].children[0].children[1].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
@@ -64,9 +54,11 @@ function openModal(movie) {
     })
 }
 
-function findBestMovies(param, place="") {  
+function findBestMovies(param, place="") {
+    let genre = ""
     if (param > 0) {
-        searchURL = "?sort_by=imdb_score&genre=" + genresTab[param]
+        genre = genresTab[param]
+        searchURL = "?sort_by=imdb_score&genre=" + genre
     } else if (param == 0) {
         searchURL = "?sort_by=imdb_score"
     }
@@ -74,17 +66,17 @@ function findBestMovies(param, place="") {
     APIRequest("titles/" + searchURL).then((res) => {
         let numberOfPages = res.count
         let pageNumber = Math.trunc(numberOfPages / 5) - 1
-        APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score").then((page) => {
+        APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score&genre=" + genre).then((page) => {
             page.results.forEach(movie => {
                 bestMovies.push(movie)
             });
         }).then(() => {
-            APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score").then((page) => {
+            APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
                 page.results.forEach(movie => {
                     bestMovies.push(movie)
                 });
             }).then(() => {
-                APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score").then((page) => {
+                APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
                     page.results.forEach(movie => {
                         bestMovies.push(movie)
                     });
@@ -125,8 +117,25 @@ function fillBestMovies(bestMovies) {
     }
 }
 
+function fillCategory(bestMovies, place) {
+    let thumbnail = place.children[1]
+    for (let i = 0; i < 6; i++) {
+        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+            thumbnail.children[i].children[0].setAttribute("src", movie.image_url)
+            thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
+            thumbnail.children[i].children[1].children[0].innerHTML = movie.title
+            thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
+                openModal(movie)
+            })
+        })
+    }
+}
+
 function startFilled() {
     findBestMovies(0)
-    findBestMovies(0)
-    findBestMovies(0)
+    place = document.getElementsByClassName("container")
+    findBestMovies(7, place[1])
+    findBestMovies(10, place[2])
 }
+
+startFilled()
