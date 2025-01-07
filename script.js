@@ -109,6 +109,7 @@ function fillBestMovies() {
             bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
             bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
             bestMoviesElt.children[i].children[1].children[0].innerHTML = movie.title
+            bestMoviesElt.children[i].children[1].style.display = "inherit"
             bestMoviesElt.children[i].children[1].children[1].addEventListener("click", () => {
                 openModal(movie)
             })
@@ -119,14 +120,22 @@ function fillBestMovies() {
 function fillCategory(place) {
     let thumbnail = place.children[1]
     for (let i = 0; i < 6; i++) {
-        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
-            thumbnail.children[i].children[0].setAttribute("src", movie.image_url)
-            thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
-            thumbnail.children[i].children[1].children[0].innerHTML = movie.title
-            thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
-                openModal(movie)
+        if (bestMovies.length > 0) {
+            APIRequest("titles/" + bestMovies.pop().id)
+            .then((movie) => {
+                thumbnail.children[i].children[0].setAttribute("src", movie.image_url)
+                thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
+                thumbnail.children[i].children[1].children[0].innerHTML = movie.title
+                thumbnail.children[i].children[1].style.display = "inherit"
+                thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
+                    openModal(movie)
+                })
             })
-        })
+        } else {
+            thumbnail.children[i].children[0].setAttribute("src", "img/no_movie.jpg")
+            thumbnail.children[i].children[0].setAttribute("alt", "Error")
+            thumbnail.children[i].children[1].children[0].innerHTML = ""
+        }
     }
 }
 
@@ -138,7 +147,6 @@ function startFilled() {
     let select = document.getElementsByName("otherCategory")
     for (let i = 0; i < select[0].length; i++) {
         select[0][i].addEventListener("click", (e) => {
-            console.log(e.target.value)
             findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.value], place[3])
         })
     }
