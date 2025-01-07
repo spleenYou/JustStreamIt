@@ -52,6 +52,11 @@ function openModal(movie) {
     modal.children[3].addEventListener("click", () => {
         modal.style.display = "none"
     })
+    modal.scroll({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+    })
 }
 
 let bestMovies = []
@@ -135,6 +140,7 @@ function fillCategory(place) {
             thumbnail.children[i].children[0].setAttribute("src", "img/no_movie.jpg")
             thumbnail.children[i].children[0].setAttribute("alt", "Error")
             thumbnail.children[i].children[1].children[0].innerHTML = ""
+            thumbnail.children[i].children[1].style.display = "none"
         }
     }
 }

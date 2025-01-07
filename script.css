@@ -110,6 +110,9 @@ h1 {
     min-height: 100%;
     object-fit: cover;
     width: 100%;
+    align-items: end;
+    display: flex;
+    justify-content: center;
 }
 
 .movieBanner {
@@ -187,12 +190,17 @@ h1 {
 
 #modal > div > div {
     width: 423px;
-    height: 359px;
+    min-height: 359px;
 }
 
 #modal > div > img {
     width: 227px;
     font-weight: bold;
+    height: fit-content;
+}
+
+.information {
+    height: fit-content;
 }
 
 .information > div {
