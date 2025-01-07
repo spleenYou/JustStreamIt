@@ -93,10 +93,9 @@ h1 {
 }
 
 .picturesMovie {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    row-gap: 30px;
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .picturesMovie > div {
