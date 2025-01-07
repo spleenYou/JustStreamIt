@@ -54,56 +54,40 @@ function openModal(movie) {
     })
 }
 
-async function findBestMovies(param, place="") {
-    let genre = ""
-    if (param > 0) {
-        genre = genresTab[param]
-        searchURL = "?sort_by=imdb_score&genre=" + genre
-    } else if (param == 0) {
-        searchURL = "?sort_by=imdb_score"
-    }
-    let bestMovies = []
-    await APIRequest("titles/" + searchURL).then((res) => {
+let bestMovies = []
+function findNumberPages(searchURL, place) {
+    bestMovies = []
+    APIRequest(searchURL).then((res) => {
         let numberOfPages = res.count
-        let pageNumber = Math.trunc(numberOfPages / 5) - 1
-        if (res.count < 6) {
-            pageNumber = 1
+        let pageNumber = 1
+        if (res.count >= 6) {
+            pageNumber = Math.trunc(numberOfPages / 5) - 1
         }
-        APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score&genre=" + genre).then((page) => {
-            console.log(page)
-            page.results.forEach(movie => {
-                bestMovies.push(movie)
-            })
-            if (page.next === null) {
-                throw new Error("Erreur")
-                
-            }
-        }).then(() => {
-            APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
-                page.results.forEach(movie => {
-                    bestMovies.push(movie)
-                })
-            }).then(() => {
-                APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
-                    page.results.forEach(movie => {
-                        bestMovies.push(movie)
-                    })
-                }).finally(() => {
-                    if (param > 0) {
-                        fillCategory(bestMovies, place)
-                    } else if (param == 0) {
-                        fillBestMovies(bestMovies)
-                    }
-                })
-            })
-        }).catch(() => {
-            console.log("Erreur")
-        })
+        return pageNumber
+    }).then((pageNumber) => {
+        findBestMovies(searchURL, pageNumber, place)
     })
-    console.log("a")
 }
 
-function fillBestMovies(bestMovies) {
+function findBestMovies(searchURL, pageNumber, place) {
+    APIRequest(searchURL + "&page=" + pageNumber).then((page) => {
+        page.results.forEach(movie => {
+            bestMovies.push(movie)
+        })
+        if (page.next) {
+            pageNumber += 1
+            findBestMovies(searchURL, pageNumber, place)
+        } else {
+            if (place === "bestMovies") {
+                fillBestMovies()
+            } else {
+                fillCategory(place)
+            }
+        }
+    })
+}
+
+function fillBestMovies() {
     APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
         const bestMovie = document.getElementById("bestMovie").children[1]
         bestMovie.children[0].setAttribute("src", movie.image_url)
@@ -132,7 +116,7 @@ function fillBestMovies(bestMovies) {
     }
 }
 
-function fillCategory(bestMovies, place) {
+function fillCategory(place) {
     let thumbnail = place.children[1]
     for (let i = 0; i < 6; i++) {
         APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
@@ -147,14 +131,15 @@ function fillCategory(bestMovies, place) {
 }
 
 function startFilled() {
-    findBestMovies(0)
+    findNumberPages("titles/?sort_by=imdb_score", "bestMovies")
     let place = document.getElementsByClassName("container")
-    //findBestMovies(7, place[1])
-    //findBestMovies(10, place[2])
+    findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[7], place[1])
+    findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[10], place[2])
     let select = document.getElementsByName("otherCategory")
     for (let i = 0; i < select[0].length; i++) {
         select[0][i].addEventListener("click", (e) => {
-            findBestMovies(e.target.value, place[3])
+            console.log(e.target.value)
+            findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.value], place[3])
         })
     }
 }
