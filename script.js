@@ -54,7 +54,7 @@ function openModal(movie) {
     })
 }
 
-function findBestMovies(param, place="") {
+async function findBestMovies(param, place="") {
     let genre = ""
     if (param > 0) {
         genre = genresTab[param]
@@ -63,24 +63,32 @@ function findBestMovies(param, place="") {
         searchURL = "?sort_by=imdb_score"
     }
     let bestMovies = []
-    APIRequest("titles/" + searchURL).then((res) => {
+    await APIRequest("titles/" + searchURL).then((res) => {
         let numberOfPages = res.count
         let pageNumber = Math.trunc(numberOfPages / 5) - 1
+        if (res.count < 6) {
+            pageNumber = 1
+        }
         APIRequest("titles/?page=" + pageNumber + "&sort_by=imdb_score&genre=" + genre).then((page) => {
+            console.log(page)
             page.results.forEach(movie => {
                 bestMovies.push(movie)
-            });
+            })
+            if (page.next === null) {
+                throw new Error("Erreur")
+                
+            }
         }).then(() => {
             APIRequest("titles/?page=" + (pageNumber + 1) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
                 page.results.forEach(movie => {
                     bestMovies.push(movie)
-                });
+                })
             }).then(() => {
                 APIRequest("titles/?page=" + (pageNumber + 2) + "&sort_by=imdb_score&genre=" + genre).then((page) => {
                     page.results.forEach(movie => {
                         bestMovies.push(movie)
-                    });
-                }).then(() => {
+                    })
+                }).finally(() => {
                     if (param > 0) {
                         fillCategory(bestMovies, place)
                     } else if (param == 0) {
@@ -88,8 +96,11 @@ function findBestMovies(param, place="") {
                     }
                 })
             })
+        }).catch(() => {
+            console.log("Erreur")
         })
     })
+    console.log("a")
 }
 
 function fillBestMovies(bestMovies) {
@@ -105,7 +116,11 @@ function fillBestMovies(bestMovies) {
         })
     })
     let bestMoviesElt = document.getElementById("bestMovies").children[1]
-    for (let i = 0; i < 6; i++) {
+    let max = bestMovies.length
+    if (max > 6) {
+        max = 6
+    }
+    for (let i = 0; i < max; i++) {
         APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
             bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
             bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
@@ -133,9 +148,15 @@ function fillCategory(bestMovies, place) {
 
 function startFilled() {
     findBestMovies(0)
-    place = document.getElementsByClassName("container")
-    findBestMovies(7, place[1])
-    findBestMovies(10, place[2])
+    let place = document.getElementsByClassName("container")
+    //findBestMovies(7, place[1])
+    //findBestMovies(10, place[2])
+    let select = document.getElementsByName("otherCategory")
+    for (let i = 0; i < select[0].length; i++) {
+        select[0][i].addEventListener("click", (e) => {
+            findBestMovies(e.target.value, place[3])
+        })
+    }
 }
 
 startFilled()
