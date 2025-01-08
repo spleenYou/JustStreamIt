@@ -189,3 +189,11 @@ window.onclick = function(event) {
 }
 
 startFilled()
+
+let imgs = document.getElementsByTagName("img")
+for (let i = 0; i < imgs.length; i++) {
+    //console.log(imgs[i].attributes[0])
+    imgs[i].addEventListener("error", (e) => {
+        e.target.setAttribute("src", "img/error.jpg")
+    })
+}
