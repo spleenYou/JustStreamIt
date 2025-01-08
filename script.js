@@ -148,11 +148,44 @@ function startFilled() {
     findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[7], place[1])
     findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[10], place[2])
     let select = document.getElementsByName("otherCategory")
-    for (let i = 0; i < select[0].length; i++) {
-        select[0][i].addEventListener("click", (e) => {
-            findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.value], place[3])
+    let greenCase = document.createElement("div")
+    greenCase.classList.add("green-case")
+    greenCase.appendChild(document.createElement("div"))
+    greenCase.children[0].classList.add("green-case-front")
+
+    let dropdowns = document.getElementsByClassName("dropdown-content")
+    for (let i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", (e) => {
+            e.target.appendChild(greenCase)
+            greenCase.style.display = "inline"
+            findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.attributes[0].value], place[3])
         })
     }
+}
+
+function toggleArrow() {
+    let arrowDisplay = document.getElementsByClassName("dropdown-arrow")[0].style.display
+    if (arrowDisplay != "none") {
+        document.getElementsByClassName("dropdown-arrow")[0].style.display = "none"
+    }
+    else {
+        document.getElementsByClassName("dropdown-arrow")[0].style.display = "block"
+    }
+}
+
+document.getElementsByClassName("dropbtn")[0].addEventListener("click", () => {
+    document.getElementById("myDropdown").classList.toggle("show")
+    toggleArrow()
+})
+
+window.onclick = function(event) {
+  let dropdowns = document.getElementsByClassName("dropdown-content")
+  if (!event.target.matches('.dropbtn') && dropdowns[0].classList.contains('show')) {
+    for (let i = 0; i < dropdowns.length; i++) {
+      dropdowns[i].classList.remove('show')
+    }
+    toggleArrow()
+  }
 }
 
 startFilled()
