@@ -46,6 +46,10 @@ h1 {
     margin-left: 30px;
 }
 
+#bestMovie {
+    width: -moz-available;
+}
+
 #bestMovie img {
     padding: 10px 20px;
     width: 227px;
@@ -88,7 +92,7 @@ h1 {
 }
 
 .container {
-    display: flex;
+    display: noneflex;
     flex-flow: column;
 }
 

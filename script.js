@@ -105,11 +105,7 @@ function fillBestMovies() {
         })
     })
     let bestMoviesElt = document.getElementById("bestMovies").children[1]
-    let max = bestMovies.length
-    if (max > 6) {
-        max = 6
-    }
-    for (let i = 0; i < max; i++) {
+    for (let i = 0; i < 6; i++) {
         APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
             bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
             bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
@@ -120,6 +116,7 @@ function fillBestMovies() {
             })
         })
     }
+    bestMoviesElt.style.display = "grid"
 }
 
 function fillCategory(place) {
