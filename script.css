@@ -91,10 +91,11 @@ h1 {
 .picturesMovie {
     display: none;
     grid-gap: 30px;
-    width: 100%;
+    width: inherit;
 }
 
 .picturesMovie > div {
+    display: grid;
     position: relative;
     height: 247px;
 }
@@ -159,16 +160,17 @@ h1 {
 }
 
 #modal {
+    display: none;
     grid-template-columns: 1fr;
     grid-row-gap: 10px;
     border: 6px solid black;
-    padding: 20px 30px;
+    padding: 10px 10px;
     align-items: center;
     background-color: white;
-    position: absolute;
+    position: fixed;
     overflow-y: scroll;
     margin: 0 -6px;
-    max-height: 700px;
+    max-height: 90%;
 }
 
 #modal h2 {

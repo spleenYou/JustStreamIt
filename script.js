@@ -11,6 +11,8 @@ async function APIRequest(endURL) {
 
 // Gestion du modal
 function openModal(movie) {
+    let modal = document.getElementById('modal')
+    console.log(modal)
     let genres = ""
     let countries = ""
     let directors = ""
@@ -103,7 +105,6 @@ function fillBestMovies() {
         bestMovie.children[1].children[1].children[1].innerHTML = movie.description
         let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
         bestMovieDetailsButton.addEventListener("click", (e) => {
-            e.target.parentElement.parentElement.appendChild(modal)
             openModal(movie)
         })
     })
@@ -123,7 +124,6 @@ function fillCategory(place) {
                 thumbnail.children[i].children[1].style.display = "inherit"
                 thumbnail.children[i].children[1].children[1].addEventListener("click", (e) => {
                     openModal(movie)
-                    e.target.parentElement.parentElement.appendChild(modal)
                 })
             })
         } else {
