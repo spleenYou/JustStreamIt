@@ -156,6 +156,8 @@ function startFilled() {
     let dropdowns = document.getElementsByClassName("dropdown-content")
     for (let i = 0; i < dropdowns.length; i++) {
         dropdowns[i].addEventListener("click", (e) => {
+            let dropBtnElt = document.getElementsByClassName("dropbtn")[0]
+            dropBtnElt.innerHTML = e.target.innerHTML
             e.target.appendChild(greenCase)
             greenCase.style.display = "inline"
             findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.attributes[0].value], place[3])
