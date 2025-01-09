@@ -6,7 +6,7 @@
 body {
     display: flex;
     flex-flow: column;
-    padding-top: 25px;
+    padding: 25px 0;
     border: 1px solid black;
     font-family: "Oswald", serif;
     font-optical-sizing: auto;
@@ -89,8 +89,8 @@ h1 {
 }
 
 .picturesMovie {
-    display: none;
-    grid-gap: 30px;
+    display: grid;
+    grid-gap: 25px;
     width: inherit;
 }
 
@@ -141,22 +141,6 @@ h1 {
     width: 81px;
     height: 25px;
     font-size: 14px;
-}
-
-.categoryChoice {
-    display: flex;
-    align-items: center;
-    column-gap: 20px;
-}
-
-.categoryChoice select {
-    appearance: none;
-    margin: 40px 0 40px 20px;
-    background-color: white;
-    border: 1px solid black;
-    font-weight: bold;
-    font-size: 36px;
-    width: 404px;
 }
 
 #modal {
@@ -224,7 +208,24 @@ h1 {
     height: 32px;
 }
 
-/*
+.categoryChoice {
+    padding: 20px 0;
+    width: inherit;
+}
+
+.categoryChoice h1 {
+    display: none;
+}
+
+.categoryChoice select {
+    appearance: none;
+    margin: 40px 0 40px 20px;
+    background-color: white;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: 36px;
+    width: inherit;
+}
 
 .dropbtn {
     font-size: 36px;
@@ -234,43 +235,38 @@ h1 {
     padding: 16px;
     padding-right: 45px;
     cursor: pointer;
-    min-width: 430px;
     border: 1px black solid;
+    width: 100%;
 }
   
   .dropdown {
     position: relative;
     display: inline-block;
+    width: 100%;
 }
   
   .dropdown-content {
     display: none;
     position: absolute;
     background-color: white;
-    min-width: 200px;
     overflow: auto;
     scrollbar-width: none;
     z-index: 1;
     max-height: 205px;
+    width: 100%;
 }
   
   .dropdown-content span {
+    cursor: pointer;
     font-size: 36px;
-    color: black;
     padding: 12px 16px;
-    text-decoration: none;
     display: block;
     border: 1px black solid;
-    width: 396px;
     position: relative;
     font-weight: bold;
 }
   
-  .dropdown span:hover {
-    background-color: #ddd;
-}
-  
-  .show {
+.show {
     display: block;
 }
   
@@ -316,7 +312,7 @@ h1 {
     background: linear-gradient(180deg, rgba(153,225,164,1) 0%, rgba(0,183,0,0) 20%, rgba(0,183,0,0) 100%);
     top: 2px;
     left: 2px;
-} */
+}
 
 /* @media screen and (min-width: 1280px){
     body {

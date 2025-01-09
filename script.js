@@ -12,11 +12,16 @@ async function APIRequest(endURL) {
 // Gestion du modal
 function openModal(movie) {
     let modal = document.getElementById('modal')
-    console.log(modal)
     let genres = ""
     let countries = ""
     let directors = ""
     let actors = ""
+    let rated = ""
+    if (movie.rated !== "Not rated or unkown rating") {
+        rated = "PG" + movie.rated
+    } else {
+        rated = "No rated"
+    }
     for (let i = 0; i < movie.genres.length; i++) {
         genres += movie.genres[i]
         if (i < movie.genres.length - 1) {
@@ -42,7 +47,7 @@ function openModal(movie) {
         }
     }
     modal.children[0].children[2].children[0].innerHTML = movie.year + " - " + genres
-    modal.children[0].children[2].children[1].innerHTML = movie.duration + " minutes (" + countries + ")"
+    modal.children[0].children[2].children[1].innerHTML = rated + " - " + movie.duration + " minutes (" + countries + ")"
     modal.children[0].children[2].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
     modal.children[0].children[2].children[5].innerHTML = directors
     modal.children[0].children[1].innerHTML = movie.title
@@ -132,7 +137,6 @@ function fillCategory(place) {
             thumbnail.children[i].children[1].children[0].innerHTML = ""
             thumbnail.children[i].children[1].style.display = "none"
         }
-        thumbnail.style.display = "grid"
     }
 }
 
