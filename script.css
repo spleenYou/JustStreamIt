@@ -4,76 +4,69 @@
 }
 
 body {
-    width: 1054px;
     display: flex;
     flex-flow: column;
-    margin: auto auto 1px auto;
-    padding: 20px;
+    padding-top: 25px;
     border: 1px solid black;
     font-family: "Oswald", serif;
     font-optical-sizing: auto;
     font-style: normal;
     align-items: center;
+    margin: 0;
 }
 
 section {
     margin: 0 108px;
+    width: 85%;
 }
 
 h1 {
-    font-size: 48px;
+    font-size: 32px;
 }
 
 #title {
+    display: grid;
+    justify-content: center;
     background-color: #61787f;
-    display: flex;
-    flex-wrap: wrap;
-    width: 837px;
     height: 122px;
-    margin: auto;
-    align-content: center;
 }
 
 #title img {
-    height: 94px;
-    margin-left: 20px;
+    height: 95%;
+    margin: auto;
 }
 
 #title span {
-    color: white;
-    font-size: 40px;
-    align-content: center;
-    margin-left: 30px;
-}
-
-#bestMovie {
-    width: -moz-available;
+    display: none;
 }
 
 #bestMovie img {
-    padding: 10px 20px;
-    width: 227px;
-    height: 334px;
+    width: 90%;
+    margin: auto;
 }
 
 #bestMovie > div {
     border: 6px solid black;
-    display: flex;
+    display: grid;
     align-items: center;
+    padding: 14px 0;
+    grid-column-gap: 10px;
+    position: relative;
 }
 
 .resume {
-    position: relative;
-    width: 100%;
+    width: 90%;
+    margin: auto;
+    display: grid;
 }
 
 .resume h2 {
-    font-size: 48px;
+    font-size: 32px;
+    margin: 0;
 }
 
 .resume p {
-    font-size: 28px;
-    padding-bottom: 80px;
+    font-size: 16px;
 }
 
 .resume button {
@@ -81,31 +74,33 @@ h1 {
     border: none;
     color: white;
     font-weight: bold;
-    padding: 10px;
     border-radius: 25px;
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    width: 166px;
-    height: 68px;
-    font-size: 24px;
+    width: 91px;
+    height: 40px;
+    font-size: 14px;
+    cursor: pointer;
+    justify-self: center;
 }
 
 .container {
-    display: noneflex;
+    display: flex;
     flex-flow: column;
+    align-items: center;
 }
 
 .picturesMovie {
-    display: grid;
+    display: none;
     grid-gap: 30px;
-    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
 }
 
 .picturesMovie > div {
     position: relative;
     height: 247px;
-    width: 252px;
+}
+
+.picturesMovie > div:nth-child(n + 3) {
+    display: none;
 }
 
 .picturesMovie > div > img {
@@ -131,6 +126,7 @@ h1 {
     color: white;
     padding-left: 10px;
     font-size: 24px;
+    font-weight: normal;
 }
 
 .movieBanner button {
@@ -143,6 +139,7 @@ h1 {
     bottom: 10px;
     width: 81px;
     height: 25px;
+    font-size: 14px;
 }
 
 .categoryChoice {
@@ -162,23 +159,16 @@ h1 {
 }
 
 #modal {
+    grid-template-columns: 1fr;
+    grid-row-gap: 10px;
     border: 6px solid black;
-    display: none;
-    flex-flow: column;
-    width: 718px;
-    max-height: 90%;
     padding: 20px 30px;
     align-items: center;
     background-color: white;
-    position: fixed;
+    position: absolute;
     overflow-y: scroll;
-}
-
-#modal > div {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    width: 100%;
+    margin: 0 -6px;
+    max-height: 700px;
 }
 
 #modal h2 {
@@ -186,22 +176,17 @@ h1 {
     margin: 0;
 }
 
-#modal > div > div {
-    width: 423px;
-    min-height: 359px;
-}
-
-#modal > div > img {
-    width: 227px;
-    font-weight: bold;
+#modal > img {
+    width: 100%;
     height: fit-content;
+    grid-row-start: 3;
 }
 
 .information {
     height: fit-content;
 }
 
-.information > div {
+.information div {
     display: flex;
     flex-flow: column;
     font-weight: bold;
@@ -219,17 +204,25 @@ h1 {
 .modal-actors {
     width: 100%;
     font-size: 20px;
+    margin-bottom: 0;
 }
 
 #modal button {
-    border: none;
-    border-radius: 25px;
-    background-color: red;
-    color: white;
-    font-size: 20px;
-    width: 214px;
-    height: 36px;
+    display:none;
 }
+
+#modal .cross {
+    display: block;
+    position: absolute;
+    right: 16px; 
+    border:none;
+    background-color: white;
+    font-size: 32px;
+    padding: 0;
+    height: 32px;
+}
+
+/*
 
 .dropbtn {
     font-size: 36px;
@@ -321,4 +314,317 @@ h1 {
     background: linear-gradient(180deg, rgba(153,225,164,1) 0%, rgba(0,183,0,0) 20%, rgba(0,183,0,0) 100%);
     top: 2px;
     left: 2px;
+} */
+
+/* @media screen and (min-width: 1280px){
+    body {
+        width: 1054px;
+    }
+
+    #title span {
+        color: white;
+        font-size: 40px;
+        align-content: center;
+        margin-left: 30px;
+        display: inline-block;
+    }
+
+    #title img {
+        margin-left: 20px;
+    }
+
+    section {
+        margin: 0 108px;
+    }
+
+    #title {
+        background-color: #61787f;
+        display: flex;
+        flex-wrap: wrap;
+        width: 80%;
+        height: 122px;
+        margin: auto;
+        align-content: center;
+    }
+
+    #bestMovie {
+        width: -moz-available;
+    }
+
+    #bestMovie img {
+        padding: 10px 20px;
+        width: 227px;
+        height: 334px;
+    }
+
+    #bestMovie > div {
+        border: 6px solid black;
+        display: flex;
+        align-items: center;
+    }
+
+    .resume {
+        position: relative;
+        width: 100%;
+    }
+
+    .resume h2 {
+        font-size: 48px;
+    }
+
+    .resume p {
+        font-size: 28px;
+        padding-bottom: 80px;
+    }
+
+    .resume button {
+        background-color: #FA0B0B;
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 25px;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: 166px;
+        height: 68px;
+        font-size: 24px;
+    }
+
+    .container {
+        display: noneflex;
+        flex-flow: column;
+    }
+
+    .picturesMovie {
+        display: grid;
+        grid-gap: 30px;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .picturesMovie > div {
+        position: relative;
+        height: 247px;
+        width: 252px;
+    }
+
+    .picturesMovie > div > img {
+        height: 0;
+        min-height: 100%;
+        object-fit: cover;
+        width: 100%;
+        align-items: end;
+        display: flex;
+        justify-content: center;
+    }
+
+    .movieBanner {
+        display: none;
+        position: absolute;
+        top: 12%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 102px;
+    }
+
+    .movieBanner h2 {
+        color: white;
+        padding-left: 10px;
+        font-size: 24px;
+    }
+
+    .movieBanner button {
+        border: none;
+        background-color: #2D2C2C;
+        color: white;
+        border-radius: 25px;
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 81px;
+        height: 25px;
+    }
+
+    .categoryChoice {
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+    }
+
+    .categoryChoice select {
+        appearance: none;
+        margin: 40px 0 40px 20px;
+        background-color: white;
+        border: 1px solid black;
+        font-weight: bold;
+        font-size: 36px;
+        width: 404px;
+    }
+
+    #modal {
+        border: 6px solid black;
+        display: none;
+        flex-flow: column;
+        width: 718px;
+        max-height: 90%;
+        padding: 20px 30px;
+        align-items: center;
+        background-color: white;
+        position: fixed;
+        overflow-y: scroll;
+    }
+
+    #modal > div {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #modal h2 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #modal > div > div {
+        width: 423px;
+        min-height: 359px;
+    }
+
+    #modal > div > img {
+        width: 227px;
+        font-weight: bold;
+        height: fit-content;
+    }
+
+    .information {
+        height: fit-content;
+    }
+
+    .information > div {
+        display: flex;
+        flex-flow: column;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .no-bold {
+        font-weight: normal;
+    }
+
+    .modal-resume {
+        font-size: 24px;
+    }
+
+    .modal-actors {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    #modal button {
+        border: none;
+        border-radius: 25px;
+        background-color: red;
+        color: white;
+        font-size: 20px;
+        width: 214px;
+        height: 36px;
+    }
+
+    .dropbtn {
+        font-size: 36px;
+        font-weight: bold;
+        background-color: white;
+        color: black;
+        padding: 16px;
+        padding-right: 45px;
+        cursor: pointer;
+        min-width: 430px;
+        border: 1px black solid;
+    }
+  
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+  
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 200px;
+        overflow: auto;
+        scrollbar-width: none;
+        z-index: 1;
+        max-height: 205px;
+    }
+    
+    .dropdown-content span {
+        font-size: 36px;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        border: 1px black solid;
+        width: 396px;
+        position: relative;
+        font-weight: bold;
+    }
+    
+    .dropdown span:hover {
+        background-color: #ddd;
+    }
+    
+    .show {
+        display: block;
+    }
+    
+    .dropdown-arrow {
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 15px solid #000000;
+        position: absolute;
+        top: 32px;
+        right: 14px;
+    }
+
+    .green-case {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        display: none;
+        height: 36px;
+        width: 36px;
+    }
+    
+    .green-case-front {
+        height: 36px;
+        width: 36px;
+        background: radial-gradient(circle at bottom center, rgba(0,183,0,1) 85%, rgba(0,100,0,1) 100%);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border-radius: 8px;
+    }
+  
+    .green-case-front::after {
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        position: absolute;
+        content: "✓";
+        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(180deg, rgba(153,225,164,1) 0%, rgba(0,183,0,0) 20%, rgba(0,183,0,0) 100%);
+        top: 2px;
+        left: 2px;
+    }
 }
+
+@media screen and (min-width: 400px) and (max-width: 1279px){
+}
+*/

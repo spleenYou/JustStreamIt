@@ -11,7 +11,6 @@ async function APIRequest(endURL) {
 
 // Gestion du modal
 function openModal(movie) {
-    let modal = document.getElementById("modal")
     let genres = ""
     let countries = ""
     let directors = ""
@@ -40,18 +39,21 @@ function openModal(movie) {
             countries += " / "
         }
     }
-    modal.children[0].children[0].children[1].children[0].innerHTML = movie.year + " - " + genres
-    modal.children[0].children[0].children[1].children[1].innerHTML = movie.duration + " minutes (" + countries + ")"
-    modal.children[0].children[0].children[1].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
-    modal.children[0].children[0].children[1].children[5].innerHTML = directors
-    modal.children[0].children[0].children[0].innerHTML = movie.title
-    modal.children[0].children[1].setAttribute("src", movie.image_url)
-    modal.children[1].innerHTML = movie.long_description
-    modal.children[2].innerHTML = "Avec:<br>" + actors
-    modal.style.display = "flex"
-    modal.children[3].addEventListener("click", () => {
-        modal.style.display = "none"
-    })
+    modal.children[0].children[2].children[0].innerHTML = movie.year + " - " + genres
+    modal.children[0].children[2].children[1].innerHTML = movie.duration + " minutes (" + countries + ")"
+    modal.children[0].children[2].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
+    modal.children[0].children[2].children[5].innerHTML = directors
+    modal.children[0].children[1].innerHTML = movie.title
+    modal.children[1].setAttribute("src", movie.image_url)
+    modal.children[2].innerHTML = movie.long_description
+    modal.children[3].innerHTML = "Avec:<br>" + actors
+    modal.style.display = "grid"
+    let bouton = modal.getElementsByTagName("button")
+    for (let i = 0; i < bouton.length; i++) {
+        bouton[i].addEventListener("click", () => {
+            modal.style.display = "none"
+        })
+    }
     modal.scroll({
         top: 0,
         left: 0,
@@ -93,30 +95,20 @@ function findBestMovies(searchURL, pageNumber, place) {
 }
 
 function fillBestMovies() {
+    const bestMovie = document.getElementById("bestMovie")
     APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
-        const bestMovie = document.getElementById("bestMovie").children[1]
-        bestMovie.children[0].setAttribute("src", movie.image_url)
-        bestMovie.children[0].setAttribute("alt", movie.title + "_image")
-        bestMovie.children[1].children[0].innerHTML = movie.title
-        bestMovie.children[1].children[1].innerHTML = movie.description
+        bestMovie.children[1].children[0].setAttribute("src", movie.image_url)
+        bestMovie.children[1].children[0].setAttribute("alt", movie.title + "_image")
+        bestMovie.children[1].children[1].children[0].innerHTML = movie.title
+        bestMovie.children[1].children[1].children[1].innerHTML = movie.description
         let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
-        bestMovieDetailsButton.addEventListener("click", () => {
+        bestMovieDetailsButton.addEventListener("click", (e) => {
+            e.target.parentElement.parentElement.appendChild(modal)
             openModal(movie)
         })
     })
-    let bestMoviesElt = document.getElementById("bestMovies").children[1]
-    for (let i = 0; i < 6; i++) {
-        APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
-            bestMoviesElt.children[i].children[0].setAttribute("src", movie.image_url)
-            bestMoviesElt.children[i].children[0].setAttribute("alt", movie.title + "_image")
-            bestMoviesElt.children[i].children[1].children[0].innerHTML = movie.title
-            bestMoviesElt.children[i].children[1].style.display = "inherit"
-            bestMoviesElt.children[i].children[1].children[1].addEventListener("click", () => {
-                openModal(movie)
-            })
-        })
-    }
-    bestMoviesElt.style.display = "grid"
+    let bestMoviesElt = bestMovie.nextElementSibling
+    fillCategory(bestMoviesElt)
 }
 
 function fillCategory(place) {
@@ -129,8 +121,9 @@ function fillCategory(place) {
                 thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
                 thumbnail.children[i].children[1].children[0].innerHTML = movie.title
                 thumbnail.children[i].children[1].style.display = "inherit"
-                thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
+                thumbnail.children[i].children[1].children[1].addEventListener("click", (e) => {
                     openModal(movie)
+                    e.target.parentElement.parentElement.appendChild(modal)
                 })
             })
         } else {
@@ -139,6 +132,7 @@ function fillCategory(place) {
             thumbnail.children[i].children[1].children[0].innerHTML = ""
             thumbnail.children[i].children[1].style.display = "none"
         }
+        thumbnail.style.display = "grid"
     }
 }
 
@@ -194,7 +188,6 @@ startFilled()
 
 let imgs = document.getElementsByTagName("img")
 for (let i = 0; i < imgs.length; i++) {
-    //console.log(imgs[i].attributes[0])
     imgs[i].addEventListener("error", (e) => {
         e.target.setAttribute("src", "img/error.jpg")
     })
