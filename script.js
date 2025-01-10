@@ -1,5 +1,6 @@
 const startURL = "http://localhost:8000/api/v1/"
-let genresTab = [undefined, "Romance", "Biography", "Crime", "Drama", "History", "Adventure", "Fantasy", "War", "Mystery", "Horror", "Western", "Comedy", "Family", "Action", "Sci-Fi", "Thriller", "Sport", "Animation", "Musical", "Music", "Film-Noir", "Adult", "Documentary", "Reality-TV", "News"]
+let genresTab = []
+let page = 1
 
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
@@ -20,7 +21,7 @@ function openModal(movie) {
     if (movie.rated !== "Not rated or unkown rating") {
         rated = "PG" + movie.rated
     } else {
-        rated = "No rated"
+        rated = "Not rated"
     }
     for (let i = 0; i < movie.genres.length; i++) {
         genres += movie.genres[i]
@@ -68,9 +69,8 @@ function openModal(movie) {
     })
 }
 
-let bestMovies = []
 function findNumberPages(searchURL, place) {
-    bestMovies = []
+    let bestMoviesTab = []
     APIRequest(searchURL).then((res) => {
         let numberOfPages = res.count
         let pageNumber = 1
@@ -79,55 +79,58 @@ function findNumberPages(searchURL, place) {
         }
         return pageNumber
     }).then((pageNumber) => {
-        findBestMovies(searchURL, pageNumber, place)
+        bestMoviesTab = []
+        findBestMovies(searchURL, pageNumber, place, bestMoviesTab)
     })
 }
 
-function findBestMovies(searchURL, pageNumber, place) {
+function findBestMovies(searchURL, pageNumber, place, bestMoviesTab) {
     APIRequest(searchURL + "&page=" + pageNumber).then((page) => {
+        console.log(pageNumber, bestMoviesTab)
         page.results.forEach(movie => {
-            bestMovies.push(movie)
+            bestMoviesTab.push(movie)
         })
-        if (page.next) {
+        if (page.next != null) {
             pageNumber += 1
-            findBestMovies(searchURL, pageNumber, place)
+            findBestMovies(searchURL, pageNumber, place, bestMoviesTab)
         } else {
             if (place === "bestMovies") {
-                fillBestMovies()
+                fillBestMovies(bestMoviesTab)
             } else {
-                fillCategory(place)
+                fillCategory(bestMoviesTab, place)
             }
         }
     })
 }
 
-function fillBestMovies() {
+function fillBestMovies(bestMoviesTab) {
     const bestMovie = document.getElementById("bestMovie")
-    APIRequest("titles/" + bestMovies.pop().id).then((movie) => {
+    APIRequest("titles/" + bestMoviesTab.pop().id)
+    .then((movie) => {
         bestMovie.children[1].children[0].setAttribute("src", movie.image_url)
         bestMovie.children[1].children[0].setAttribute("alt", movie.title + "_image")
         bestMovie.children[1].children[1].children[0].innerHTML = movie.title
         bestMovie.children[1].children[1].children[1].innerHTML = movie.description
         let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
-        bestMovieDetailsButton.addEventListener("click", (e) => {
+        bestMovieDetailsButton.addEventListener("click", () => {
             openModal(movie)
         })
     })
     let bestMoviesElt = bestMovie.nextElementSibling
-    fillCategory(bestMoviesElt)
+    fillCategory(bestMoviesTab, bestMoviesElt)
 }
 
-function fillCategory(place) {
+function fillCategory(bestMoviesTab, place) {
     let thumbnail = place.children[1]
     for (let i = 0; i < 6; i++) {
-        if (bestMovies.length > 0) {
-            APIRequest("titles/" + bestMovies.pop().id)
+        if (bestMoviesTab.length > 0) {
+            APIRequest("titles/" + bestMoviesTab.pop().id)
             .then((movie) => {
                 thumbnail.children[i].children[0].setAttribute("src", movie.image_url)
                 thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
                 thumbnail.children[i].children[1].children[0].innerHTML = movie.title
                 thumbnail.children[i].children[1].style.display = "inherit"
-                thumbnail.children[i].children[1].children[1].addEventListener("click", (e) => {
+                thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
                     openModal(movie)
                 })
             })
@@ -140,12 +143,15 @@ function fillCategory(place) {
     }
 }
 
+function findNameCategory(id) {
+    return genresTab.find((category) => category.id == id).name
+}
+
 function startFilled() {
     findNumberPages("titles/?sort_by=imdb_score", "bestMovies")
     let place = document.getElementsByClassName("container")
-    findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[7], place[1])
-    findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[10], place[2])
-    let select = document.getElementsByName("otherCategory")
+    findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(7), place[1])
+    findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(10), place[2])
     let greenCase = document.createElement("div")
     greenCase.classList.add("green-case")
     greenCase.appendChild(document.createElement("div"))
@@ -158,7 +164,7 @@ function startFilled() {
             dropBtnElt.innerHTML = e.target.innerHTML
             e.target.appendChild(greenCase)
             greenCase.style.display = "inline"
-            findNumberPages("titles/?sort_by=imdb_score&genre=" + genresTab[e.target.attributes[0].value], place[3])
+            findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(e.target.attributes[0].value), place[3])
         })
     }
 }
@@ -188,7 +194,38 @@ window.onclick = function(event) {
   }
 }
 
-startFilled()
+function start() {
+    let genre = {}
+    APIRequest(`genres/?page=${page}`).then((genres) => {
+        for (let i = 0; i < genres.results.length; i++) {
+            genre = {
+                id: genres.results[i].id,
+                name: genres.results[i].name
+            }
+            genresTab.push(genre)
+        }
+        return genres.next
+    }).then((next) => {
+        if (next != null) {
+        page += 1
+            start(page)
+        } else {
+            createSpanCategory()
+        }
+    })
+}
+
+function createSpanCategory() {
+    let span
+    let myDropdown = document.getElementById("myDropdown")
+    for (let i = 0; i < genresTab.length; i++) {
+        span = document.createElement("span")
+        span.setAttribute("value", genresTab[i].id)
+        span.innerHTML = genresTab[i].name
+        myDropdown.appendChild(span)
+    }
+    startFilled()
+}
 
 let imgs = document.getElementsByTagName("img")
 for (let i = 0; i < imgs.length; i++) {
@@ -196,3 +233,5 @@ for (let i = 0; i < imgs.length; i++) {
         e.target.setAttribute("src", "img/error.jpg")
     })
 }
+
+start()
