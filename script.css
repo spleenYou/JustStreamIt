@@ -139,19 +139,23 @@ h1 {
     cursor: pointer;
 }
 
-#modal {
+#modalPlace {
     display: none;
+    position: fixed;
+    top: 2%;
+    bottom: 2%;
+    justify-items: center;
+}
+
+#modal {
+    display: grid;
     grid-template-columns: 1fr;
+    background-color: white;
     grid-row-gap: 10px;
     border: 6px solid black;
     padding: 10px 10px;
     align-items: center;
-    background-color: white;
-    position: fixed;
-    overflow-y: scroll;
-    margin: 0 -6px;
-    top: 2%;
-    bottom: 2%;
+    overflow-y: auto;
 }
 
 #modal h2 {
@@ -393,13 +397,12 @@ h1 {
         display: block;
     }
 
-    #modal {
-        flex-flow: column;
-        max-height: 90%;
-        padding: 20px 30px;
-        position: fixed;
-        max-height: 90%;
+    #modalPlace {
         bottom: auto;
+    }
+
+    #modal {
+        padding: 20px 30px;
     }
 
     #modal .cross {
@@ -538,9 +541,5 @@ h1 {
 
     .dropdown-arrow {
         top: 26px;
-    }
-
-    #modal {
-        width: 450px;
     }
 }
