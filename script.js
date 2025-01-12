@@ -13,40 +13,13 @@ async function APIRequest(endURL) {
 // Gestion du modal
 function openModal(movie) {
     let modal = document.getElementById('modal')
-    let genres = ""
-    let countries = ""
-    let directors = ""
-    let actors = ""
-    let rated = ""
-    if (movie.rated !== "Not rated or unkown rating") {
-        rated = "PG" + movie.rated
-    } else {
-        rated = "Not rated"
-    }
-    for (let i = 0; i < movie.genres.length; i++) {
-        genres += movie.genres[i]
-        if (i < movie.genres.length - 1) {
-            genres += ", "
-        }
-    }
-    for (let i = 0; i < movie.actors.length; i++) {
-        actors += movie.actors[i]
-        if (i < movie.actors.length - 1) {
-            actors += ", "
-        }
-    }
-    for (let i = 0; i < movie.directors.length; i++) {
-        directors += movie.directors[i]
-        if (i < movie.directors.length - 1) {
-            directors += ", "
-        }
-    }
-    for (let i = 0; i < movie.countries.length; i++) {
-        countries += movie.countries[i]
-        if (i < movie.countries.length - 1) {
-            countries += " / "
-        }
-    }
+    let genres = movie.genres.join(", ");
+    let countries = movie.countries.join(" / ");
+    let directors = movie.directors.join(", ");
+    let actors = movie.actors.join(", ");
+    let rated = movie.rated !== "Not rated or unknown rating" 
+        ? "Not rated"
+        : "PG" + movie.rated
     modal.children[0].children[2].children[0].innerHTML = movie.year + " - " + genres
     modal.children[0].children[2].children[1].innerHTML = rated + " - " + movie.duration + " minutes (" + countries + ")"
     modal.children[0].children[2].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
@@ -86,7 +59,6 @@ function findNumberPages(searchURL, place) {
 
 function findBestMovies(searchURL, pageNumber, place, bestMoviesTab) {
     APIRequest(searchURL + "&page=" + pageNumber).then((page) => {
-        console.log(pageNumber, bestMoviesTab)
         page.results.forEach(movie => {
             bestMoviesTab.push(movie)
         })
