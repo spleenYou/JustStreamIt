@@ -16,7 +16,6 @@ body {
 }
 
 section {
-    margin: 0 108px;
     width: 85%;
 }
 
@@ -91,7 +90,7 @@ h1 {
 .picturesMovie {
     display: grid;
     grid-gap: 25px;
-    width: inherit;
+    width: 100%;
 }
 
 .picturesMovie > div {
@@ -137,6 +136,7 @@ h1 {
     width: 81px;
     height: 25px;
     font-size: 14px;
+    cursor: pointer;
 }
 
 #modal {
@@ -157,6 +157,7 @@ h1 {
 #modal h2 {
     font-size: 48px;
     margin: 0;
+    width: 84%;
 }
 
 #modal > img {
@@ -192,6 +193,7 @@ h1 {
 
 #modal button {
     display:none;
+    cursor: pointer;
 }
 
 #modal .cross {
@@ -332,7 +334,7 @@ h1 {
     }
 
     section {
-        width: 1054px;
+        width: 56%;
     }
 
     #bestMovie img {
@@ -453,7 +455,7 @@ h1 {
     }
 }
 
-@media screen and (min-width: 400px) and (max-width: 1023px) {
+@media screen and (min-width: 600px) and (max-width: 1023px) {
     #title {
         display: flex;
     }
