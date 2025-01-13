@@ -28,12 +28,7 @@ function createSpanCategory() {
                 e.target.appendChild(greenCase)
                 greenCase.style.display = "inline"
                 let categoryId = e.target.attributes[0].value
-                let category = categoryTab.find((cat) => cat.id == categoryId)
-                if (categoryTab.find((cat) => cat.id == categoryId).pagesNumber == 0) {
-                    findNumberPages(category.name)
-                } else {
-                    fillCategory(category)
-                }
+                findNumberPages(categoryTab.find((cat) => cat.id == categoryId).name)
             })
         }
     }

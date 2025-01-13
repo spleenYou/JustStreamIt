@@ -24,6 +24,7 @@ function findNumberPages(categoryName) {
     let category = categoryTab.find((e) => e.name === categoryName)
     APIRequest(category.url).then((res) => {
         let pagesNumber = res.count
+        category.moviesTab = []
         category.pagesNumber =  Math.ceil(pagesNumber / 5)
     }).then(() => {
         findMoviesInformation(category)
