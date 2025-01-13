@@ -271,7 +271,7 @@ h1 {
       border-right: 10px solid transparent;
       border-top: 15px solid #000000;
       position: absolute;
-      top: 32px;
+      top: 38px;
       right: 14px;
 }
   
@@ -531,6 +531,6 @@ h1 {
     }
 
     .dropdown-arrow {
-        top: 26px;
+        top: 30px;
     }
 }
