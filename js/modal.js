@@ -1,22 +1,3 @@
-// Création du modal
-{/*
-<div class="information">
-    <button class="cross">❌</button>
-    <h2></h2>
-    <div>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span><br></span>
-        <span>Réalisé par:</span>
-        <span class="no-bold"></span>  
-    </div>
-</div>
-<img src="" alt="">
-<p class="modal-resume"></p>
-<p class="modal-actors"></p>
-<button>Fermer</button> */}
-
 let modal = document.getElementById("modal")
 modal.appendChild(document.createElement("div"))
 modal.children[0].classList.add("information")

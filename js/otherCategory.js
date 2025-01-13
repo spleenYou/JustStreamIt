@@ -17,7 +17,7 @@ function createSpanCategory() {
     let span
     let myDropdown = document.getElementById("myDropdown")
     for (let i = 1; i < categoryTab.length; i++) {
-        if (!categoryDisplay.find((cat) => cat == categoryTab[i].name)) {
+        if (!categoriesDisplay.find((cat) => cat == categoryTab[i].name)) {
             span = document.createElement("span")
             span.setAttribute("value", categoryTab[i].id)
             span.innerHTML = categoryTab[i].name
@@ -36,7 +36,6 @@ function createSpanCategory() {
     greenCase.classList.add("green-case")
     greenCase.appendChild(document.createElement("div"))
     greenCase.children[0].classList.add("green-case-front")
-    startFilled()
 }
 
 function toggleArrow() {

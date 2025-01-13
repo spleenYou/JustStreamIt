@@ -21,6 +21,7 @@ section {
 
 h1 {
     font-size: 32px;
+    align-self: start;
 }
 
 #title {
@@ -98,10 +99,6 @@ h1 {
     height: 247px;
 }
 
-.picturesMovie > div:nth-child(n + 3) {
-    display: none;
-}
-
 .picturesMovie > div > img {
     height: 0;
     min-height: 100%;
@@ -137,6 +134,19 @@ h1 {
     height: 25px;
     font-size: 14px;
     cursor: pointer;
+}
+
+.buttonMoreLess {
+    border: none;
+    cursor: pointer;
+    background-color: red;
+    border-radius: 20px;
+    width: 160px;
+    height: 30px;
+    font-size: 16px;
+    color: white;
+    margin-top: 30px;
+    font-weight: bold;
 }
 
 #modal {
@@ -304,14 +314,6 @@ h1 {
     left: 2px;
 }
 
-.toggleCheckbox {
-    display: none;
-}
-
-.toggleCheckbox:checked div:nth-child(2n + 1) {
-    display: block;
-}
-
 @media screen and (min-width: 1024px){
     body {
         justify-content: center;
@@ -378,8 +380,8 @@ h1 {
         grid-template-columns: 1fr 1fr 1fr;
     }
 
-    .picturesMovie > div:nth-child(n + 3) {
-        display: grid;
+    .buttonMoreLess {
+        display: none;
     }
 
     .categoryChoice {
@@ -508,10 +510,6 @@ h1 {
         grid-gap: 60px;
         grid-template-columns: 1fr 1fr;
         width: 100%;
-    }
-
-    .picturesMovie > div:nth-child(2n + 1) {
-        display: grid;
     }
 
     .categoryChoice {

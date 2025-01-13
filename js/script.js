@@ -1,17 +1,3 @@
-const startURL = "http://localhost:8000/api/v1/"
-let genresTab = []
-let page = 1
-let categoryDisplay = ["best", "Fantasy", "Horror"]
-let categoryTab = [{
-        id: 0,
-        name: "best",
-        title: "Film les mieux notés",
-        moviesTab: [],
-        pagesNumber: 0,
-        url: "titles/?sort_by=imdb_score"
-    }
-]
-
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
     const r = await fetch(startURL + endURL)
@@ -37,8 +23,8 @@ function findMoviesInformation(category) {
             category.moviesTab.push(page.results[i - 1])
         }
         moviesNumber = category.name != "best"
-            ? thumbnailNumber
-            : thumbnailNumber + 1
+            ? thumbnailNumber.more
+            : thumbnailNumber.more + 1
         if ((category.moviesTab.length < moviesNumber) && (category.pagesNumber > 1)) {
             category.pagesNumber -= 1
             findMoviesInformation(category)
@@ -52,9 +38,9 @@ function fillCategory(category) {
     let isBest = category.name === "best"
     ? 1
     : 0
-    for (let i = 0; i < (thumbnailNumber + isBest); i++) {
+    for (let i = 0; i < (thumbnailNumber.more + isBest); i++) {
         let place = document.getElementsByClassName("container")
-        let indexCat = categoryDisplay.findIndex((name) => name == category.name)
+        let indexCat = categoriesDisplay.findIndex((name) => name == category.name)
         if (indexCat == -1) {
             indexCat = 3
         }
@@ -88,12 +74,6 @@ function fillCategory(category) {
     }
 }
 
-function startFilled() {
-    findNumberPages("best")
-    findNumberPages("Fantasy")
-    findNumberPages("Horror")
-}
-
 function start() {
     let genre = {}
     APIRequest(`genres/?page=${page}`).then((genres) => {
@@ -114,15 +94,9 @@ function start() {
         page += 1
             start(page)
         } else {
+            fillContainers()
             createSpanCategory()
         }
-    })
-}
-
-let imgs = document.getElementsByTagName("img")
-for (let i = 0; i < imgs.length; i++) {
-    imgs[i].addEventListener("error", (e) => {
-        e.target.setAttribute("src", "img/error.jpg")
     })
 }
 
