@@ -17,8 +17,7 @@
 <p class="modal-actors"></p>
 <button>Fermer</button> */}
 
-let modal = document.createElement("div")
-modal.id = "modal"
+let modal = document.getElementById("modal")
 modal.appendChild(document.createElement("div"))
 modal.children[0].classList.add("information")
 // Croix pour le modal en tablette et smartphone
@@ -68,12 +67,12 @@ function showModal(movie) {
     modal.children[1].setAttribute("src", movie.image_url)
     modal.children[2].innerHTML = movie.long_description
     modal.children[3].innerHTML = "Avec:<br>" + actors
-    modal.parentNode.style.display = "grid"
+    modal.style.display = "grid"
     console.log(modal)
     let bouton = modal.getElementsByTagName("button")
     for (let i = 0; i < bouton.length; i++) {
         bouton[i].addEventListener("click", () => {
-            modal.parentNode.style.display = "none"
+            modal.style.display = "none"
         })
     }
     modal.scroll({

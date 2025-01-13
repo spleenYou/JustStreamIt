@@ -139,23 +139,18 @@ h1 {
     cursor: pointer;
 }
 
-#modalPlace {
+#modal {
     display: none;
     position: fixed;
     top: 2%;
     bottom: 2%;
-    justify-items: center;
-}
-
-#modal {
-    display: grid;
     grid-template-columns: 1fr;
     background-color: white;
     grid-row-gap: 10px;
     border: 6px solid black;
-    padding: 10px 10px;
-    align-items: center;
     overflow-y: auto;
+    scrollbar-width: none;
+    padding: 10px;
 }
 
 #modal h2 {
@@ -204,6 +199,7 @@ h1 {
     display: block;
     position: absolute;
     right: 16px; 
+    top: 16px;
     border:none;
     background-color: white;
     font-size: 32px;
@@ -397,12 +393,9 @@ h1 {
         display: block;
     }
 
-    #modalPlace {
-        bottom: auto;
-    }
-
     #modal {
         padding: 20px 30px;
+        bottom: auto;
     }
 
     #modal .cross {
