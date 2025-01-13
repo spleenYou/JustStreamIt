@@ -1,10 +1,4 @@
-{/* <div>
-<img src="img/no_movie.jpg" alt="">
-<div class="movieBanner">
-    <h2></h2>
-    <button>Détails</button>
-</div>
-</div> */}
+let thumbnailNumber = 6
 
 function addPictureMovie() {
     let pictureMovie = document.createElement("div")

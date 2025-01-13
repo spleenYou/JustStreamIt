@@ -1,7 +1,16 @@
 const startURL = "http://localhost:8000/api/v1/"
 let genresTab = []
 let page = 1
-let thumbnailNumber = 6
+let categoryDisplay = ["best", "Fantasy", "Horror"]
+let categoryTab = [{
+        id: 0,
+        name: "best",
+        title: "Film les mieux notés",
+        moviesTab: [],
+        pagesNumber: 0,
+        url: "titles/?sort_by=imdb_score"
+    }
+]
 
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
@@ -11,73 +20,67 @@ async function APIRequest(endURL) {
     }
 }
 
-function findNumberPages(searchURL, place) {
-    let bestMoviesTab = []
-    APIRequest(searchURL).then((res) => {
-        let numberOfPages = res.count
-        let pageNumber = 1
-        if (res.count >= 6) {
-            pageNumber = Math.trunc(numberOfPages / 5) - 1
-        }
-        return pageNumber
-    }).then((pageNumber) => {
-        bestMoviesTab = []
-        findBestMovies(searchURL, pageNumber, place, bestMoviesTab)
+function findNumberPages(category) {
+    let categoryInformation = categoryTab.find((e) => e.name === category)
+    APIRequest(categoryInformation.url).then((res) => {
+        let pagesNumber = res.count
+        categoryInformation.pagesNumber =  Math.trunc(pagesNumber / 5) + 1
+    }).then(() => {
+        findMovies(categoryInformation)
     })
 }
 
-function findBestMovies(searchURL, pageNumber, place, bestMoviesTab) {
-    APIRequest(searchURL + "&page=" + pageNumber).then((page) => {
-        page.results.forEach(movie => {
-            bestMoviesTab.push(movie)
-        })
-        if (page.next != null) {
-            pageNumber += 1
-            findBestMovies(searchURL, pageNumber, place, bestMoviesTab)
+function findMovies(category) {
+    APIRequest(category.url + "&page=" + category.pagesNumber).then((page) => {
+        for (let i = page.results.length; i != 0; i--) {
+            category.moviesTab.push(page.results[i - 1])
+        }
+        moviesNumber = category.name != "best"
+            ? thumbnailNumber
+            : thumbnailNumber + 1
+        if (category.moviesTab.length < moviesNumber) {
+            category.pagesNumber -= 1
+            findMovies(category)
         } else {
-            if (place === "bestMovies") {
-                fillBestMovies(bestMoviesTab)
-            } else {
-                fillCategory(bestMoviesTab, place)
-            }
+            fillCategory(category)
         }
     })
 }
 
-function fillBestMovies(bestMoviesTab) {
-    const bestMovie = document.getElementById("bestMovie")
-    APIRequest("titles/" + bestMoviesTab.pop().id)
-    .then((movie) => {
-        bestMovie.children[1].children[0].setAttribute("src", movie.image_url)
-        bestMovie.children[1].children[0].setAttribute("alt", movie.title + "_image")
-        bestMovie.children[1].children[1].children[0].innerHTML = movie.title
-        bestMovie.children[1].children[1].children[1].innerHTML = movie.description
-        let bestMovieDetailsButton = bestMovie.getElementsByTagName("button")[0]
-        bestMovieDetailsButton.addEventListener("click", () => {
-            showModal(movie)
-        })
-    })
-    let bestMoviesElt = bestMovie.nextElementSibling
-    fillCategory(bestMoviesTab, bestMoviesElt)
-}
-
-function fillCategory(bestMoviesTab, place) {
-    let thumbnail = place.children[1]
-    for (let i = 0; i < 6; i++) {
-        if (bestMoviesTab.length > 0) {
-            APIRequest("titles/" + bestMoviesTab.pop().id)
+function fillCategory(category) {
+    let isBest = category.name === "best"
+    ? 1
+    : 0
+    for (let i = 0; i < (thumbnailNumber + isBest); i++) {
+        if (category.moviesTab.length > 0) {
+            APIRequest("titles/" + category.moviesTab[i].id)
             .then((movie) => {
-                thumbnail.children[i].children[0].setAttribute("src", movie.image_url)
-                thumbnail.children[i].children[0].setAttribute("alt", movie.title + "_image")
-                thumbnail.children[i].children[1].children[0].innerHTML = movie.title
-                thumbnail.children[i].children[1].style.display = "inherit"
-                thumbnail.children[i].children[1].children[1].addEventListener("click", () => {
-                    showModal(movie)
+                    let place = document.getElementsByClassName("container")
+                    let indexCat = categoryDisplay.findIndex((name) => name == category.name)
+                    if (indexCat == -1) {
+                        indexCat = 3
+                    }
+                    let thumbnail = place[indexCat].children[1]
+                    let index = i - isBest
+                    if (index == -1) {
+                        index = 1
+                        thumbnail = document.getElementById("bestMovie")
+                        thumbnail.children[1].children[1].children[1].innerHTML = movie.description
+                        button = bestMovie.getElementsByTagName("button")[0]
+                    } else {
+                        button = thumbnail.children[index].children[1].children[1]
+                        thumbnail.children[index].children[1].style.display = "inherit"
+                    }
+                    thumbnail.children[index].children[0].setAttribute("src", movie.image_url)
+                    thumbnail.children[index].children[0].setAttribute("alt", movie.title + "_image")
+                    thumbnail.children[index].children[1].children[0].innerHTML = movie.title
+                    button.addEventListener("click", () => {
+                        showModal(movie)
+                    })
                 })
-            })
         } else {
             thumbnail.children[i].children[0].setAttribute("src", "img/no_movie.jpg")
-            thumbnail.children[i].children[0].setAttribute("alt", "Error")
+            thumbnail.children[i].children[0].setAttribute("alt", "no_movie")
             thumbnail.children[i].children[1].children[0].innerHTML = ""
             thumbnail.children[i].children[1].style.display = "none"
         }
@@ -85,29 +88,13 @@ function fillCategory(bestMoviesTab, place) {
 }
 
 function findNameCategory(id) {
-    return genresTab.find((category) => category.id == id).name
+    return categoryTab.find((category) => category.id == id).name
 }
 
 function startFilled() {
-    findNumberPages("titles/?sort_by=imdb_score", "bestMovies")
-    let place = document.getElementsByClassName("container")
-    findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(7), place[1])
-    findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(10), place[2])
-    let greenCase = document.createElement("div")
-    greenCase.classList.add("green-case")
-    greenCase.appendChild(document.createElement("div"))
-    greenCase.children[0].classList.add("green-case-front")
-
-    let dropdowns = document.getElementsByClassName("dropdown-content")
-    for (let i = 0; i < dropdowns.length; i++) {
-        dropdowns[i].addEventListener("click", (e) => {
-            let dropBtnElt = document.getElementsByClassName("dropbtn")[0]
-            dropBtnElt.innerHTML = e.target.innerHTML
-            e.target.appendChild(greenCase)
-            greenCase.style.display = "inline"
-            findNumberPages("titles/?sort_by=imdb_score&genre=" + findNameCategory(e.target.attributes[0].value), place[3])
-        })
-    }
+    findNumberPages("best")
+    findNumberPages("Fantasy")
+    findNumberPages("Horror")
 }
 
 function start() {
@@ -116,9 +103,13 @@ function start() {
         for (let i = 0; i < genres.results.length; i++) {
             genre = {
                 id: genres.results[i].id,
-                name: genres.results[i].name
+                name: genres.results[i].name,
+                title: genres.results[i].name,
+                moviesTab: [],
+                pagesNumber: 0,
+                url: "titles/?sort_by=imdb_score&genre=" + genres.results[i].name
             }
-            genresTab.push(genre)
+            categoryTab.push(genre)
         }
         return genres.next
     }).then((next) => {
