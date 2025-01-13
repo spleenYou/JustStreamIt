@@ -66,7 +66,6 @@ function showModal(movie) {
     modal.children[2].innerHTML = movie.long_description
     modal.children[3].innerHTML = "Avec:<br>" + actors
     modal.style.display = "grid"
-    console.log(modal)
     let bouton = modal.getElementsByTagName("button")
     for (let i = 0; i < bouton.length; i++) {
         bouton[i].addEventListener("click", () => {

@@ -17,9 +17,7 @@ function createSpanCategory() {
     let span
     let myDropdown = document.getElementById("myDropdown")
     for (let i = 1; i < categoryTab.length; i++) {
-        // console.log(categoryDisplay.find((cat) => cat == categoryTab[i].name))
         if (!categoryDisplay.find((cat) => cat == categoryTab[i].name)) {
-            console.log(i, categoryTab[i].name)
             span = document.createElement("span")
             span.setAttribute("value", categoryTab[i].id)
             span.innerHTML = categoryTab[i].name
@@ -29,7 +27,13 @@ function createSpanCategory() {
                 dropBtnElt.innerHTML = e.target.innerHTML
                 e.target.appendChild(greenCase)
                 greenCase.style.display = "inline"
-                findNumberPages(findNameCategory(e.target.attributes[0].value))
+                let categoryId = e.target.attributes[0].value
+                let category = categoryTab.find((cat) => cat.id == categoryId)
+                if (categoryTab.find((cat) => cat.id == categoryId).pagesNumber == 0) {
+                    findNumberPages(category.name)
+                } else {
+                    fillCategory(category)
+                }
             })
         }
     }

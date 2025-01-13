@@ -20,17 +20,17 @@ async function APIRequest(endURL) {
     }
 }
 
-function findNumberPages(category) {
-    let categoryInformation = categoryTab.find((e) => e.name === category)
-    APIRequest(categoryInformation.url).then((res) => {
+function findNumberPages(categoryName) {
+    let category = categoryTab.find((e) => e.name === categoryName)
+    APIRequest(category.url).then((res) => {
         let pagesNumber = res.count
-        categoryInformation.pagesNumber =  Math.trunc(pagesNumber / 5) + 1
+        category.pagesNumber =  Math.ceil(pagesNumber / 5)
     }).then(() => {
-        findMovies(categoryInformation)
+        findMoviesInformation(category)
     })
 }
 
-function findMovies(category) {
+function findMoviesInformation(category) {
     APIRequest(category.url + "&page=" + category.pagesNumber).then((page) => {
         for (let i = page.results.length; i != 0; i--) {
             category.moviesTab.push(page.results[i - 1])
@@ -38,9 +38,9 @@ function findMovies(category) {
         moviesNumber = category.name != "best"
             ? thumbnailNumber
             : thumbnailNumber + 1
-        if (category.moviesTab.length < moviesNumber) {
+        if ((category.moviesTab.length < moviesNumber) && (category.pagesNumber > 1)) {
             category.pagesNumber -= 1
-            findMovies(category)
+            findMoviesInformation(category)
         } else {
             fillCategory(category)
         }
@@ -52,15 +52,15 @@ function fillCategory(category) {
     ? 1
     : 0
     for (let i = 0; i < (thumbnailNumber + isBest); i++) {
-        if (category.moviesTab.length > 0) {
+        let place = document.getElementsByClassName("container")
+        let indexCat = categoryDisplay.findIndex((name) => name == category.name)
+        if (indexCat == -1) {
+            indexCat = 3
+        }
+        let thumbnail = place[indexCat].children[1]
+        if (i < category.moviesTab.length) {
             APIRequest("titles/" + category.moviesTab[i].id)
             .then((movie) => {
-                    let place = document.getElementsByClassName("container")
-                    let indexCat = categoryDisplay.findIndex((name) => name == category.name)
-                    if (indexCat == -1) {
-                        indexCat = 3
-                    }
-                    let thumbnail = place[indexCat].children[1]
                     let index = i - isBest
                     if (index == -1) {
                         index = 1
@@ -85,10 +85,6 @@ function fillCategory(category) {
             thumbnail.children[i].children[1].style.display = "none"
         }
     }
-}
-
-function findNameCategory(id) {
-    return categoryTab.find((category) => category.id == id).name
 }
 
 function startFilled() {
@@ -130,6 +126,3 @@ for (let i = 0; i < imgs.length; i++) {
 }
 
 start()
-
-document.getElementsByClassName("picturesMovie")[0].appendChild(addPictureMovie())
-document.getElementsByClassName("picturesMovie")[0].appendChild(addPictureMovie())
