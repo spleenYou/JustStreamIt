@@ -1,6 +1,7 @@
 const startURL = "http://localhost:8000/api/v1/"
 let genresTab = []
 let page = 1
+let thumbnailNumber = 6
 
 // Gestion des requêtes avec l'API
 async function APIRequest(endURL) {
@@ -109,31 +110,6 @@ function startFilled() {
     }
 }
 
-function toggleArrow() {
-    let arrowDisplay = document.getElementsByClassName("dropdown-arrow")[0].style.display
-    if (arrowDisplay != "none") {
-        document.getElementsByClassName("dropdown-arrow")[0].style.display = "none"
-    }
-    else {
-        document.getElementsByClassName("dropdown-arrow")[0].style.display = "block"
-    }
-}
-
-document.getElementsByClassName("dropbtn")[0].addEventListener("click", () => {
-    document.getElementById("myDropdown").classList.toggle("show")
-    toggleArrow()
-})
-
-window.onclick = function(event) {
-  let dropdowns = document.getElementsByClassName("dropdown-content")
-  if (!event.target.matches('.dropbtn') && dropdowns[0].classList.contains('show')) {
-    for (let i = 0; i < dropdowns.length; i++) {
-      dropdowns[i].classList.remove('show')
-    }
-    toggleArrow()
-  }
-}
-
 function start() {
     let genre = {}
     APIRequest(`genres/?page=${page}`).then((genres) => {
@@ -155,18 +131,6 @@ function start() {
     })
 }
 
-function createSpanCategory() {
-    let span
-    let myDropdown = document.getElementById("myDropdown")
-    for (let i = 0; i < genresTab.length; i++) {
-        span = document.createElement("span")
-        span.setAttribute("value", genresTab[i].id)
-        span.innerHTML = genresTab[i].name
-        myDropdown.appendChild(span)
-    }
-    startFilled()
-}
-
 let imgs = document.getElementsByTagName("img")
 for (let i = 0; i < imgs.length; i++) {
     imgs[i].addEventListener("error", (e) => {
@@ -175,3 +139,6 @@ for (let i = 0; i < imgs.length; i++) {
 }
 
 start()
+
+document.getElementsByClassName("picturesMovie")[0].appendChild(addPictureMovie())
+document.getElementsByClassName("picturesMovie")[0].appendChild(addPictureMovie())

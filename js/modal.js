@@ -47,8 +47,6 @@ modal.children[3].classList.add("modal-actors")
 modal.appendChild(document.createElement("button"))
 modal.children[4].innerHTML = "Fermer"
 
-document.getElementById("modalPlace").appendChild(modal)
-
 // Gestion du modal
 function showModal(movie) {
     let modal = document.getElementById('modal')
