@@ -1,3 +1,5 @@
+// Création du modal
+
 let modal = document.getElementById("modal")
 modal.appendChild(document.createElement("div"))
 modal.children[0].classList.add("information")
@@ -22,16 +24,19 @@ modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].children[5].classList.add("no-bold")
 // Image du film
 modal.appendChild(document.createElement("img"))
+// Paragraphe pour le résumé
 modal.appendChild(document.createElement("p"))
 modal.children[2].classList.add("modal-resume")
+// Paragraphe pour les acteurs
 modal.appendChild(document.createElement("p"))
 modal.children[3].classList.add("modal-actors")
+// Bouton "fermer"
 modal.appendChild(document.createElement("button"))
 modal.children[4].innerHTML = "Fermer"
 
 // Gestion du modal
 function showModal(movie) {
-    let modal = document.getElementById('modal')
+    // Préparation des informations pour remplir le modal
     let genres = movie.genres.join(", ");
     let countries = movie.countries.join(" / ");
     let directors = movie.directors.join(", ");
@@ -51,13 +56,16 @@ function showModal(movie) {
     modal.children[1].setAttribute("src", movie.image_url)
     modal.children[2].innerHTML = movie.long_description
     modal.children[3].innerHTML = "Avec:<br>" + actors
+    // Affichage du modal
     modal.style.display = "grid"
-    let bouton = modal.getElementsByTagName("button")
-    for (let i = 0; i < bouton.length; i++) {
-        bouton[i].addEventListener("click", () => {
+    // Ajout d'un event sur la croix et le bouton "Fermer" pour fermer le modal
+    let boutons = modal.getElementsByTagName("button")
+    for (let i = 0; i < boutons.length; i++) {
+        boutons[i].addEventListener("click", () => {
             modal.style.display = "none"
         })
     }
+    // Met l'affichage du modal en haut en cas de scroll
     modal.scroll({
         top: 0,
         left: 0,
