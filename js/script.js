@@ -78,7 +78,7 @@ function fillCategory(category) {
                     button = bestMovie.getElementsByTagName("button")[0]
                 } else {
                     button = thumbnail.children[index].children[1].children[1]
-                    thumbnail.children[index].children[1].style.display = "inherit"
+                    thumbnail.children[index].children[1].style.display = "grid"
                 }
                 thumbnail.children[index].children[0].setAttribute("src", movie.image_url)
                 thumbnail.children[index].children[0].setAttribute("alt", movie.title + "_image")
