@@ -49,9 +49,9 @@ function fillContainers() {
         button.innerHTML = "Voir plus"
         // Ajout de l'event sur le bouton
         button.addEventListener("click", (e) => {
-            let viewMode = "less"
-            if (e.target.innerHTML == "Voir plus") {
-                viewMode = "more"
+            let viewMode = ""
+            if (e.target.innerHTML == "Voir moins") {
+                viewMode = "less"
             }
             // Mise à jour de la vue selon le format d'écran
             updateViewPicturesMovie(e.target.parentNode.children[1], viewMode)
