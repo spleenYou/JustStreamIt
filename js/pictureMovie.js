@@ -75,10 +75,10 @@ function updateViewPicturesMovie(container, viewLess) {
     container.nextSibling.innerHTML = "Voir moins"
     if (viewLess) {
         container.nextSibling.innerHTML = "Voir plus"
-        if (screen.width < 1023) {
+        if (window.innerWidth <= 1023) {
             viewNumber = thumbnailNumber.tablet
         }
-        if (screen.width < 600) {
+        if (window.innerWidth <= 600) {
             viewNumber = thumbnailNumber.smartphone
         }
     }
