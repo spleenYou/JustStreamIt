@@ -14,6 +14,7 @@ modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].appendChild(document.createElement("span"))
+modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].children[3].innerHTML = "<br>"
 modal.children[0].children[2].appendChild(document.createElement("span"))
 modal.children[0].children[2].children[4].innerHTML = "Réalisé par:"
@@ -34,6 +35,9 @@ function showModal(movie) {
     let genres = movie.genres.join(", ");
     let countries = movie.countries.join(" / ");
     let directors = movie.directors.join(", ");
+    let gross = movie.worldwide_gross_income
+        ? parseInt(movie.worldwide_gross_income, 10).toLocaleString('en-US') + "$"
+        : "unknown"
     let actors = movie.actors.join(", ");
     let rated = movie.rated !== "Not rated or unknown rating" 
         ? "Not rated"
@@ -41,7 +45,8 @@ function showModal(movie) {
     modal.children[0].children[2].children[0].innerHTML = movie.year + " - " + genres
     modal.children[0].children[2].children[1].innerHTML = rated + " - " + movie.duration + " minutes (" + countries + ")"
     modal.children[0].children[2].children[2].innerHTML = "IMDB score: " + movie.imdb_score + "/10"
-    modal.children[0].children[2].children[5].innerHTML = directors
+    modal.children[0].children[2].children[2].innerHTML = "Worlwide gross: " + gross
+    modal.children[0].children[2].children[6].innerHTML = directors
     modal.children[0].children[1].innerHTML = movie.title
     modal.children[1].setAttribute("src", movie.image_url)
     modal.children[2].innerHTML = movie.long_description
