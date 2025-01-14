@@ -2,8 +2,6 @@
 
 // début de l'URL de l'api
 const startURL = "http://localhost:8000/api/v1/"
-
-let page = 1
 // Tableau avec les catégories affichées
 let categoriesDisplay = ["best", "Fantasy", "Horror"]
 // Tableau pour gérer les informations des catégories

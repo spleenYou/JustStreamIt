@@ -74,9 +74,13 @@ function fillCategory(category) {
     }
 }
 
-function start() {
-    let genre = {}
-    APIRequest(`genres/?page=${page}`).then((genres) => {
+function start(next="") {
+    let url = "genres/?page=1"
+    if (next) {
+        url = next.replace(startURL, "")
+    }
+    APIRequest(url).then((genres) => {
+        let genre = {}
         for (let i = 0; i < genres.results.length; i++) {
             genre = {
                 id: genres.results[i].id,
@@ -91,8 +95,7 @@ function start() {
         return genres.next
     }).then((next) => {
         if (next != null) {
-        page += 1
-            start(page)
+            start(next)
         } else {
             fillContainers()
             createSpanCategory()
