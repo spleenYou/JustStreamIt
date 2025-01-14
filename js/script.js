@@ -121,7 +121,7 @@ function start(url) {
             // Remplissage des conteneurs
             fillContainers()
             // Création du menu déroulant
-            createSpanCategory()
+            createMenu()
         }
     })
 }

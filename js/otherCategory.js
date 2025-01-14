@@ -18,7 +18,7 @@ window.onclick = function(event) {
 }
 
 // Création du menu selon les catégories non affichées
-function createSpanCategory() {
+function createMenu() {
     // Création du carré vert
     let greenCase = document.createElement("div")
     greenCase.classList.add("green-case")
