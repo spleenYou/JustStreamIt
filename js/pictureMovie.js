@@ -49,16 +49,16 @@ function fillContainers() {
         button.innerHTML = "Voir plus"
         // Ajout de l'event sur le bouton
         button.addEventListener("click", (e) => {
-            let viewMode = ""
+            let viewLess = false
             if (e.target.innerHTML == "Voir moins") {
-                viewMode = "less"
+                viewLess = true
             }
             // Mise à jour de la vue selon le format d'écran
-            updateViewPicturesMovie(e.target.parentNode.children[1], viewMode)
+            updateViewPicturesMovie(e.target.parentNode.children[1], viewLess)
         })
         containers[i].appendChild(button)
         // Mise à jour de la vue selon le format d'écran
-        updateViewPicturesMovie(containers[i].children[1], "less")
+        updateViewPicturesMovie(containers[i].children[1], true)
     }
     // Gestion de l'affichage des img des films si elles n'existent pas
     let imgs = document.getElementsByTagName("img")
@@ -70,10 +70,10 @@ function fillContainers() {
 }
 
 // Mise à jour de la vue selon le format d'écran et du texte du bouton
-function updateViewPicturesMovie(container, viewMode) {
+function updateViewPicturesMovie(container, viewLess) {
     let viewNumber = thumbnailNumber.default
     container.nextSibling.innerHTML = "Voir moins"
-    if (viewMode == "less") {
+    if (viewLess) {
         container.nextSibling.innerHTML = "Voir plus"
         if (screen.width < 1023) {
             viewNumber = thumbnailNumber.tablet
@@ -94,6 +94,6 @@ function updateViewPicturesMovie(container, viewMode) {
 window.addEventListener("resize", () => {
     let containers = document.getElementsByClassName("container")
     for (let i = 0; i < containers.length; i++) {
-        updateViewPicturesMovie(containers[i].children[1], "less")
+        updateViewPicturesMovie(containers[i].children[1], true)
     }
 })
