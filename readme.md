@@ -1,5 +1,3 @@
-# JustStreamIt
-
 <img src="img\logo.png">
 
 Bienvenue dans le projet **JustStreamIt**, une application web permettant de visualiser en temps réel un classement de films selon leurs notes IMDB. Ce projet a été réalisé dans le cadre d'une mission pour l'association JustStreamIt.
