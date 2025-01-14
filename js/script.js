@@ -5,6 +5,7 @@ async function APIRequest(endURL) {
         return r.json()
     }
 }
+
 // Recherche le nmobre max de pages d'une catégorie
 function findNumberPages(categoryName) {
     // récupère l'objet de la catégorie
@@ -97,12 +98,7 @@ function fillCategory(category) {
 }
 
 // Départ en cherchant les catégories
-function start(next) {
-    let url = "genres/?page=1"
-    // S'il y a une autre page à chercher, on adapte l'url
-    if (next) {
-        url = next.replace(startURL, "")
-    }
+function start(url) {
     APIRequest(url).then((genres) => {
         // Création des tableaux par catégorie
         for (let i = 0; i < genres.results.length; i++) {
@@ -119,7 +115,8 @@ function start(next) {
     }).then((next) => {
         // S'il y a une page suivante, on relance la recherche sinon on continue le programme
         if (next != null) {
-            start(next)
+            // On envoie l'url sans le début
+            start(next.replace(startURL, ""))
         } else {
             // Remplissage des conteneurs
             fillContainers()
@@ -129,4 +126,4 @@ function start(next) {
     })
 }
 
-start()
+start("genres/?page=1")
