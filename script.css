@@ -1,8 +1,10 @@
+/* Font */
 @font-face {
     font-family: "Oswald";
     src: url("Oswald.ttf");
 }
 
+/* Pour un affichage sur téléphone */
 body {
     display: flex;
     flex-flow: column;
@@ -24,6 +26,7 @@ h1 {
     align-self: start;
 }
 
+/* Titre en haut de la page */
 #title {
     display: grid;
     justify-content: center;
@@ -40,11 +43,7 @@ h1 {
     display: none;
 }
 
-#bestMovie img {
-    width: 90%;
-    margin: auto;
-}
-
+/* Meilleur film */
 #bestMovie > div {
     border: 6px solid black;
     display: grid;
@@ -54,6 +53,13 @@ h1 {
     position: relative;
 }
 
+/* Image du meilleur film */
+#bestMovie img {
+    width: 90%;
+    margin: auto;
+}
+
+/* Résumé du meilleur film */
 .resume {
     width: 90%;
     margin: auto;
@@ -82,12 +88,14 @@ h1 {
     justify-self: center;
 }
 
+/* Conteneur des vignettes de film */
 .container {
     display: flex;
     flex-flow: column;
     align-items: center;
 }
 
+/* Vignette de film */
 .picturesMovie {
     display: grid;
     grid-gap: 25px;
@@ -149,6 +157,7 @@ h1 {
     font-weight: bold;
 }
 
+/* Modal */
 #modal {
     display: none;
     position: fixed;
@@ -186,6 +195,7 @@ h1 {
     font-size: 24px;
 }
 
+/* Pour les acteurs */
 .no-bold {
     font-weight: normal;
 }
@@ -217,6 +227,7 @@ h1 {
     height: 32px;
 }
 
+/* Catégorie "other" */
 .categoryChoice {
     padding: 20px 0;
     width: inherit;
@@ -279,6 +290,7 @@ h1 {
     display: block;
 }
 
+/* Carré vert */
 .green-case {
     position: absolute;
     top: 20px;
@@ -314,6 +326,7 @@ h1 {
     left: 2px;
 }
 
+/* Si l'écran est un pc */
 @media screen and (min-width: 1024px){
     body {
         justify-content: center;
@@ -453,6 +466,7 @@ h1 {
     }
 }
 
+/* Si l'écran est une tablette */
 @media screen and (min-width: 600px) and (max-width: 1023px) {
     #title {
         display: flex;
