@@ -23,8 +23,8 @@ function findMoviesInformation(category) {
             category.moviesTab.push(page.results[i - 1])
         }
         moviesNumber = category.name != "best"
-            ? thumbnailNumber.more
-            : thumbnailNumber.more + 1
+            ? thumbnailNumber.default
+            : thumbnailNumber.default + 1
         if ((category.moviesTab.length < moviesNumber) && (category.pagesNumber > 1)) {
             category.pagesNumber -= 1
             findMoviesInformation(category)
@@ -38,7 +38,7 @@ function fillCategory(category) {
     let isBest = category.name === "best"
     ? 1
     : 0
-    for (let i = 0; i < (thumbnailNumber.more + isBest); i++) {
+    for (let i = 0; i < (thumbnailNumber.default + isBest); i++) {
         let place = document.getElementsByClassName("container")
         let indexCat = categoriesDisplay.findIndex((name) => name == category.name)
         if (indexCat == -1) {

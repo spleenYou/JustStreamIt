@@ -22,7 +22,7 @@ function addToContainer(container, categoryNumber) {
 function addDivPicturesMovie() {
     let div = document.createElement("div")
     div.classList.add("picturesMovie")
-    for (let i = 0; i < thumbnailNumber.more; i++) {
+    for (let i = 0; i < thumbnailNumber.default; i++) {
         div.appendChild(addPictureMovie())
     }
     return div
@@ -59,7 +59,7 @@ function fillContainers() {
 }
 
 function updateViewPicturesMovie(container, viewMode) {
-    let viewNumber = thumbnailNumber.more
+    let viewNumber = thumbnailNumber.default
     container.nextSibling.innerHTML = "Voir moins"
     if (viewMode == "less") {
         container.nextSibling.innerHTML = "Voir plus"
