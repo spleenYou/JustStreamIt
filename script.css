@@ -334,6 +334,8 @@ h1 {
     
     #title {
         display: flex;
+        justify-content: flex-start;
+        gap: 20px;
     }
 
     #title span {
@@ -341,11 +343,11 @@ h1 {
         font-size: 40px;
         align-content: center;
         display: inline-block;
-        margin-right: 50%;
     }
 
     #title img {
         margin-left: 20px;
+        margin-right: 0;
     }
 
     section {
@@ -470,6 +472,8 @@ h1 {
 @media screen and (min-width: 600px) and (max-width: 1023px) {
     #title {
         display: flex;
+        justify-content: flex-start;
+        gap: 20px;
     }
 
     #title span {
@@ -477,11 +481,11 @@ h1 {
         font-size: 40px;
         align-content: center;
         display: inline-block;
-        margin-right: 25%;
     }
 
     #title img {
         margin-left: 20px;
+        margin-right: 0;
     }
 
     #bestMovie > div {
@@ -489,7 +493,7 @@ h1 {
     }
 
     #bestMovie img {
-        width: 250px;
+        max-width: 250px;
         padding-left: 20px;
     }
 
@@ -505,6 +509,7 @@ h1 {
 
     .resume p {
         font-size: 24px;
+        padding-bottom: 30px;
     }
 
     .resume button {
